@@ -2,41 +2,36 @@ import * as React from 'react';
 import { useState, useTransition } from 'react';
 import ProductList from './ProductList';
 
-const dummyProducts = generateProducts();
-
-function filterProducts(filterTerm) {
-  if (!filterTerm) {
-    return dummyProducts;
-  }
-  return dummyProducts.filter((product) => product.includes(filterTerm));
-}
-
-function generateProducts() {
-  const products = [];
-  for (let i = 0; i < 10000; i++) {
-    products.push(`Product ${i + 1}`);
-  }
-  return products;
-}
 
 export default function App() {
-  const [isPending, startTransition] = useTransition();
-  const [filterTerm, setFilterTerm] = useState('');
+  const [list, setList] = useState([]);
+  const [input, setInput] = useState('');
 
-  const filteredProducts = filterProducts(filterTerm);
+  const [isPending, startTransition] = useTransition(); 
 
-  function updateFilterHandler(event) {
+  const TOTAL_ITEMS = 20000;
+
+
+  function handleChange(event) {
+    setInput(event.target.value);
+
     // startTransition(() => {
-    //   setFilterTerm(event.target.value);
-    // });
-    setFilterTerm(event.target.value);
+    //   const l = [];
+    //   for(let i=0;i < TOTAL_ITEMS; i++) {
+    //     l.push(<div key={i}>{event.target.value}</div>)
+    //   }
+  
+    //   setList(l);
+    // })
+    
   }
 
   return (
     <div id="app">
-      <input type="text" onChange={updateFilterHandler} />
+      <input type="text" value={input} onChange={handleChange} />
+      {/* { isPending ? 'Loading ...' : list} */}
       {/* {isPending && <p style={{color: 'white'}}>Updating List...</p>} */}
-      <ProductList products={filteredProducts} />
+      <ProductList input={input} />
     </div>
   );
 }
